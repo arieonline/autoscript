@@ -1,4 +1,5 @@
-Automatic Script Installer by KangArie
+Automatic Script Installer by Orang
+
 ==========
 
 ## Usage
