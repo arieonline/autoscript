@@ -83,3 +83,7 @@ Tested on
 * http://blog.jualssh.com/2014/01/centos6-automatic-script-installer/
 * http://blog.jualssh.com/2014/01/debian6-sh-automatic-script-installer/
 * http://blog.jualssh.com/2014/01/debian7-sh-automatic-script-installer/
+
+Openvpn
+wget https://raw.github.com/arieonline/autoscript/master/dimas.debian
+bash dimas.debian
