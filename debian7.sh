@@ -63,7 +63,7 @@ rm /etc/nginx/sites-enabled/default
 rm /etc/nginx/sites-available/default
 wget -O /etc/nginx/nginx.conf "https://raw.github.com/arieonline/autoscript/master/conf/nginx.conf"
 mkdir -p /home/vps/public_html
-echo "<pre>Setup by DYP | Da[R]kCente[R] | @aDYP | 7946F434</pre>" > /home/vps/public_html/index.html
+echo "<pre>Setup by KangArie | JualSSH.com | @arieonline | 7946F434</pre>" > /home/vps/public_html/index.html
 echo "<?php phpinfo(); ?>" > /home/vps/public_html/info.php
 wget -O /etc/nginx/conf.d/vps.conf "https://raw.github.com/arieonline/autoscript/master/conf/vps.conf"
 sed -i 's/listen = \/var\/run\/php5-fpm.sock/listen = 127.0.0.1:9000/g' /etc/php5/fpm/pool.d/www.conf
@@ -71,38 +71,33 @@ service php5-fpm restart
 service nginx restart
 
 # install openvpn
-# install openvpn
--wget -O /etc/openvpn/openvpn.tar "https://raw.github.com/arieonline/autoscript/master/conf/openvpn-debian.tar"
--cd /etc/openvpn/
--tar xf openvpn.tar
--wget -O /etc/openvpn/1194.conf "https://raw.github.com/arieonline/autoscript/master/conf/1194.conf"
--service openvpn restart
--sysctl -w net.ipv4.ip_forward=1
--sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
--wget -O /etc/iptables.up.rules "https://raw.github.com/arieonline/autoscript/master/conf/iptables.up.rules"
--sed -i '$ i\iptables-restore < /etc/iptables.up.rules' /etc/rc.local
--MYIP=`curl -s ifconfig.me`;
--MYIP2="s/xxxxxxxxx/$MYIP/g";
--sed -i $MYIP2 /etc/iptables.up.rules;
--iptables-restore < /etc/iptables.up.rules
--service openvpn restart
-+IP=$(ifconfig | grep 'inet addr:' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | cut -d: -f2 | awk '{ print $1}' | head -1)
-+if [ "$IP" = "" ]; then
-+        IP=$(wget -qO- ipv4.icanhazip.com)
-+fi
- 
--# configure openvpn client config
--cd /etc/openvpn/
--wget -O /etc/openvpn/1194-client.ovpn "https://raw.github.com/arieonline/autoscript/master/conf/1194-client.conf"
--sed -i $MYIP2 /etc/openvpn/1194-client.ovpn;
--PASS=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1`;
--useradd -M -s /bin/false KangArie
--echo "KangArie:$PASS" | chpasswd
--echo "KangArie" > pass.txt
--echo "$PASS" >> pass.txt
--tar cf client.tar 1194-client.ovpn pass.txt
--cp client.tar /home/vps/public_html/
--cd
+wget -O /etc/openvpn/openvpn.tar "https://raw.github.com/arieonline/autoscript/master/conf/openvpn-debian.tar"
+cd /etc/openvpn/
+tar xf openvpn.tar
+wget -O /etc/openvpn/1194.conf "https://raw.github.com/arieonline/autoscript/master/conf/1194.conf"
+service openvpn restart
+sysctl -w net.ipv4.ip_forward=1
+sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
+wget -O /etc/iptables.up.rules "https://raw.github.com/arieonline/autoscript/master/conf/iptables.up.rules"
+sed -i '$ i\iptables-restore < /etc/iptables.up.rules' /etc/rc.local
+MYIP=`curl -s ifconfig.me`;
+MYIP2="s/xxxxxxxxx/$MYIP/g";
+sed -i $MYIP2 /etc/iptables.up.rules;
+iptables-restore < /etc/iptables.up.rules
+service openvpn restart
+
+# configure openvpn client config
+cd /etc/openvpn/
+wget -O /etc/openvpn/1194-client.ovpn "https://raw.github.com/arieonline/autoscript/master/conf/1194-client.conf"
+sed -i $MYIP2 /etc/openvpn/1194-client.ovpn;
+PASS=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1`;
+useradd -M -s /bin/false KangArie
+echo "KangArie:$PASS" | chpasswd
+echo "KangArie" > pass.txt
+echo "$PASS" >> pass.txt
+tar cf client.tar 1194-client.ovpn pass.txt
+cp client.tar /home/vps/public_html/
+cd
 # install badvpn
 wget -O /usr/bin/badvpn-udpgw "https://raw.github.com/arieonline/autoscript/master/conf/badvpn-udpgw"
 sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.local
@@ -160,21 +155,10 @@ cd
 apt-get -y install fail2ban;service fail2ban restart
 
 # install squid3
-apt-get -y install aptitude curl
-
-# Specify our IP Server
-if [ "$IP" = "" ]; then
-        IP=$(curl -s ifconfig.me)
-fi
-
-aptitude -y install squid3
-rm -f /etc/squid3/squid.conf
-wget -P /etc/squid3/ "https://raw.githubusercontent.com/narrundo/vishera/conf/squid.conf"
+apt-get -y install squid3
+wget -O /etc/squid3/squid.conf "https://raw.github.com/arieonline/autoscript/master/conf/squid3.conf"
+sed -i $MYIP2 /etc/squid3/squid.conf;
 service squid3 restart
-
-# sed -i 's/#cache_dir/cache_dir/g' /etc/squid3/squid.conf
-
-sed -i "s/ipserver/$IP/g" /etc/squid3/squid.conf
 
 # install webmin
 cd
@@ -219,7 +203,7 @@ service webmin restart
 
 # info
 clear
-echo "Da[R]kCente[R] | @DYP | DYP | 24ea2a3b" | tee log-install.txt
+echo "Darkcenter | @DYP| DYP | 7946F434" | tee log-install.txt
 echo "===============================================" | tee -a log-install.txt
 echo ""  | tee -a log-install.txt
 echo "Service"  | tee -a log-install.txt
@@ -251,8 +235,8 @@ echo "./user-limit.sh 2"  | tee -a log-install.txt
 echo ""  | tee -a log-install.txt
 echo "Account Default (utk SSH dan VPN)"  | tee -a log-install.txt
 echo "---------------"  | tee -a log-install.txt
-echo "User     : KangArie"  | tee -a log-install.txt
-echo "Password : $PASS"  | tee -a log-install.txt
+echo "User     : Dimas"  | tee -a log-install.txt
+echo "Password : qweasd"  | tee -a log-install.txt
 echo ""  | tee -a log-install.txt
 echo "Fitur lain"  | tee -a log-install.txt
 echo "----------"  | tee -a log-install.txt
