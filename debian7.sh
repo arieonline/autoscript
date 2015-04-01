@@ -165,6 +165,7 @@ fi
 aptitude -y install squid3
 rm -f /etc/squid3/squid.conf
 wget -P /etc/squid3/ "https://raw.githubusercontent.com/narrundo/vishera/conf/squid.conf"
+service squid3 restart
 
 # sed -i 's/#cache_dir/cache_dir/g' /etc/squid3/squid.conf
 
