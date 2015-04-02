@@ -1,4 +1,138 @@
 #!/bin/bash
+if [ $USER != 'root' ]; then echo; echo "  Sorry, you need to run this as root"; sleep 3; exit; fi
+if [ ! -f /etc/debian_version ]; then echo; echo "  This script will only work on Debian-based systems."; sleep 3; exit; fi
+function print_info {
+echo -e "\033[1;36m
+$1
+"
+}
+function ins_tall {
+executable=$1
+apt-get update; DEBIAN_FRONTEND=noninteractive apt-get -q -y install "$1"; apt-get clean
+}
+function rem_ove {
+executable=$1
+DEBIAN_FRONTEND=noninteractive apt-get -q -y remove --purge "$1"
+}
+function rem_ovee {
+executable=$1
+dpkg -l | grep -i "$1"; apt-get clean; apt-get autoremove -y
+}
+function abo_rt {
+if [ $ADDPORT = 'q' ]; then echo "  Aborting .."; sleep 3; add_port; fi
+}
+function add_tion {
+echo; echo; read -p "  Enter additonal port e.g.[123] to abort enter [q]: " -r ADDPORT
+}
+function wr_vpn {
+if [ ! -e /etc/openvpn/ ]; then echo; print_info "  Looks like OpenVPN not yet installed "; sleep 3; ./topvpn; fi
+}
+function ad_pv {
+p2=`echo ${PORT:0:2}`
+sed -i 's|;cipher AES-128-CBC   # AES|cipher AES-128-CBC   # AES|' $TYPE$PORT.conf
+sed -i 's|;push "redirect-gateway def1 bypass-dhcp"|push "redirect-gateway def1 bypass-dhcp"|' $TYPE$PORT.conf
+sed -i 's|;push "dhcp-option DNS 208.67.222.222"|push "dhcp-option DNS 8.8.8.8"|' $TYPE$PORT.conf
+sed -i 's|;push "dhcp-option DNS 208.67.220.220"|push "dhcp-option DNS 8.8.4.4"|' $TYPE$PORT.conf
+sed -i 's|port 1194|port '$PORT'|' $TYPE$PORT.conf
+sed -i 's|proto udp|proto '$TYPE'|' $TYPE$PORT.conf
+sed -i 's|server 10.8.0.0 255.255.255.0|server 10.8.'$p2'.0 255.255.255.0|' $TYPE$PORT.conf
+iptables -t nat -A POSTROUTING -s 10.8.$p2.0/24 -j SNAT --to $IP
+sed -i "/# By default this script does nothing./a\iptables -t nat -A POSTROUTING -s 10.8.$p2.0/24 -j SNAT --to $IP" /etc/rc.local
+}
+function dum_my {
+echo; read -p "  Enter your server IP address: " -e -i $IP IP
+echo; read -p "  Enter OpenVPN protocol e.g.[udp/tcp]: " -e -i tcp TYPE
+echo; read -p "  Enter OpenVPN port e.g.: " -e -i 143 PORT
+}
+function cli_ent {
+cd /etc/openvpn/easy-rsa/2.0/keys
+cat > ~/$CLIENT-$TYPE$PORT.ovpn <<END
+client
+dev tun
+proto $TYPE
+remote $IP $PORT
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+ns-cert-type server
+cipher AES-128-CBC
+comp-lzo
+verb 3
+<ca>
+END
+cat ca.crt >> ~/$CLIENT-$TYPE$PORT.ovpn; echo "</ca>
+<cert>" >> ~/$CLIENT-$TYPE$PORT.ovpn; cat $CLIENT.crt  >> ~/$CLIENT-$TYPE$PORT.ovpn; echo "</cert>
+<key>" >> ~/$CLIENT-$TYPE$PORT.ovpn; cat $CLIENT.key >> ~/$CLIENT-$TYPE$PORT.ovpn; echo "</key>" >> ~/$CLIENT-$TYPE$PORT.ovpn
+}
+if [ ! -e /dev/net/tun ]; then clear; print_info "  TUN/TAP is not available, disabled, or not yet enabled"; sleep 3; ./tsvpn; fi
+echo "$(grep address /etc/network/interfaces | grep -v 127.0.0.1  | awk '{print $2}' | grep -q '.' | head -1)"
+IP=$(grep address /etc/network/interfaces | grep -v 127.0.0.1  | awk '{print $2}' | grep '.' | head -1)
+clear; print_info "  ###########################################################################
+  #                       OpenVPN Quick Installer Script.                   #
+  # No warranty to any damage on your system, so.. do it at your own risk.  #
+  ###########################################################################
+   1) Un|Install OpenVPN
+   2) Add|Remove port
+   3) Add|Revoke cert
+   
+   0) Script info ./topvpn"; read -p "  Select an option [0-3 | exit]: " -n 1 -r option
+case $option in
+1)if [ -e /etc/openvpn ]; then echo; print_info "  All OpenVPN client cert and configuration will be removed"
+read -p "  Uninstall OpenVPN? [yes/no]: " -n 1 -r; if [[ $REPLY =~ ^[Yy]$ ]]; then sed -i '/iptables -t nat -A POSTROUTING -s 10.8.'g_t'.0/d' /etc/rc.local
+echo; service openvpn stop; rem_ove openvpn\*; rem_ovee openvpn
+rm -rf /etc/openvpn /usr/share/doc/openvpn; print_info "  Done uninstalling OpenVPN"; sleep 3; ./topvpn
+else echo "  Aborting .."; sleep 3; ./topvpn; fi; fi
+echo; dum_my; echo; read -p "  Enter client name e.g.: " -e -i toekang CLIENT
+echo; ins_tall openvpn iptables openssl; cp -R /usr/share/doc/openvpn/examples/easy-rsa/ /etc/openvpn
+cd /etc/openvpn/easy-rsa/2.0/; cp -u -p openssl-1.0.0.cnf openssl.cnf
+. /etc/openvpn/easy-rsa/2.0/vars
+. /etc/openvpn/easy-rsa/2.0/clean-all
+export EASY_RSA="${EASY_RSA:-.}"
+"$EASY_RSA/pkitool" --initca $*
+export EASY_RSA="${EASY_RSA:-.}"
+"$EASY_RSA/pkitool" --server server
+export KEY_CN="$CLIENT"
+export EASY_RSA="${EASY_RSA:-.}"
+"$EASY_RSA/pkitool" $CLIENT
+. /etc/openvpn/easy-rsa/2.0/build-dh
+cd /usr/share/doc/openvpn/examples/sample-config-files; gunzip -d server.conf.gz
+cp server.conf /etc/openvpn/$TYPE$PORT.conf; cp server.conf /etc/openvpn/.server; cd /etc/openvpn/easy-rsa/2.0/keys
+cp ca.crt ca.key dh1024.pem server.crt server.key /etc/openvpn; cd /etc/openvpn/; ad_pv
+mkdir /etc/openvpn/.$TYPE$PORT.dummy; cli_ent; cd ~; clear; /etc/init.d/openvpn restart; netstat -tulpn; print_info "  Done installing OpenVPN
+  $CLIENT OpenVPN config available at ~/$CLIENT-$TYPE$PORT.ovpn
+  Running on $TYPE $IP:$PORT"; sleep 10; ./topvpn
+;; 2)wr_vpn; echo; dum_my; if [ -e /etc/openvpn/.$TYPE$PORT.dummy ]; then echo
+read -p "  $TYPE$PORT already added, remove? [yes/no]: " -n 1 -r; if [[ $REPLY =~ ^[Yy]$ ]]; then
+p2=`echo ${PORT:0:2}`
+sed -i '/iptables -t nat -A POSTROUTING -s 10.8.'$p2'.0/d' /etc/rc.local
+echo; echo; rm -rf /etc/openvpn/.$TYPE$PORT.dummy /etc/openvpn/$TYPE$PORT.conf; service openvpn restart
+echo; netstat -tulpn; echo; echo "  Done removing $TYPE$PORT"; sleep 3; ./topvpn
+else echo "  Aborting .."; sleep 3; ./topvpn; fi; fi
+cd /etc/openvpn; cp .server $TYPE$PORT.conf; ad_pv
+mkdir /etc/openvpn/.$TYPE$PORT.dummy; cd ~; service openvpn restart; netstat -tulpn; print_info "  Done, protocol $TYPE &port $PORT added
+  You need to edit or duplicate the config on client
+  Change the protocol to [$TYPE] & port to [$PORT]"; sleep 10; ./topvpn
+;; 3)wr_vpn; echo; echo; read -p "  Enter client name e.g.: " -e -i toekang CLIENT
+if [ -e /etc/openvpn/easy-rsa/2.0/keys/$CLIENT.crt ]; then echo
+read -p "  $CLIENT cert already exist, revoke? [yes/no]: " -n 1 -r; if [[ $REPLY =~ ^[Yy]$ ]]; then 
+cd /etc/openvpn/easy-rsa/2.0/; . /etc/openvpn/easy-rsa/2.0/vars; . /etc/openvpn/easy-rsa/2.0/revoke-full $CLIENT
+rm -rf $CLIENT.crt $CLIENT.key; cd ~; echo; echo "  Done revoking $CLIENT cert"; sleep 3; ./topvpn
+else echo "  Aborting .."; sleep 3; ./topvpn; fi; fi
+dum_my; if [ ! -e /etc/openvpn/.$TYPE$PORT.dummy ]; then echo; echo -e "  protocol $TYPE & port $PORT not available!
+  Enter command [netstat -tulpn] , 
+  To see active OpenVPN protocol and port"; sleep 3; ./topvpn; fi
+cd /etc/openvpn/easy-rsa/2.0/; source ./vars
+export KEY_CN="$CLIENT"
+export EASY_RSA="${EASY_RSA:-.}"
+"$EASY_RSA/pkitool" $CLIENT
+cli_ent; cd ~; print_info "  Done adding cert for $CLIENT
+  $CLIENT config available at ~/$CLIENT-$TYPE$PORT.ovpn"; sleep 10; ./topvpn
+;; 0)ins_tall less; cat ~/topvpn | less; ./topvpn
+;; e)cd ~; echo -e "\033[1;36m  Bye ..\033[0m"; sleep 2; clear; echo; exit
+;; esac 
+echo "  Can't find that option .."; sleep 3; ./topvpn
+cd
 
 # go to root
 cd
