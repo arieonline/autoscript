@@ -127,7 +127,7 @@ push "dhcp-option DNS 8.8.4.4"
 push "route-method exe"
 push "route-delay 2"
 keepalive 5 30
-cipher AES-128-CBC
+cipher AES-256-CBC
 comp-lzo
 persist-key
 persist-tun
@@ -195,7 +195,7 @@ script-security 2
 route-method exe
 route-delay 2
 remote $IP $PORT
-cipher AES-128-CBC
+cipher AES-256-CBC
 ca [inline]
 END
 	
