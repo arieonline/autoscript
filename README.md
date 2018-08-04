@@ -25,7 +25,7 @@ wget https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/centos6s
 bash centos7softether.sh
 ```
 Tested on
-* CentOS 7 64 bit
+* CentOS 6 64 bit
 * OpenVZ only
 
 ## Description
