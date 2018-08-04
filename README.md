@@ -2,9 +2,9 @@ Automatic Script Installer by Orang
 
 ==========
 
-## Usage (Still not Working)
+## Usage
 
-### Centos 7 (OpenVZ VPS)
+### Centos 7 64 bit (OpenVZ VPS)
 ```
 wget https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/centos7.sh
 bash centos7.sh
@@ -16,18 +16,6 @@ Tested on
 * CentOS 7 64 bit
 * OpenVZ only
 
-### Centos 6 (OpenVZ VPS)
-```
-wget https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/centos6.sh
-bash centos7.sh
-
-wget https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/centos6softether.sh
-bash centos7softether.sh
-```
-Tested on
-* CentOS 6 64 bit
-* OpenVZ only
-
 ## Description
 
 ### What's server included
@@ -35,6 +23,7 @@ Tested on
 * SoftEther VPN
 * Dropbear port 143
 * Squid port 8080 (limit to IP VPS)
+* SoftEther (Please Setup Manually)
 
 ### What's features included
 * Webmin http(s)://[ip]:10000/
@@ -63,6 +52,3 @@ Tested on
 * http://blog.jualssh.com/2014/01/debian6-sh-automatic-script-installer/
 * http://blog.jualssh.com/2014/01/debian7-sh-automatic-script-installer/
 
-Openvpn
-wget https://raw.github.com/arieonline/autoscript/master/dimas.debian
-bash dimas.debian
