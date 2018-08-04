@@ -2,7 +2,7 @@ Automatic Script Installer by Orang
 
 ==========
 
-## Usage
+## Usage (Still not Working)
 
 ### Centos 7 (OpenVZ VPS)
 ```
@@ -13,9 +13,20 @@ wget https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/centos7s
 bash centos7softether.sh
 ```
 Tested on
-* CentOS 6 64 bit
+* CentOS 7 64 bit
 * OpenVZ only
 
+### Centos 6 (OpenVZ VPS)
+```
+wget https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/centos6.sh
+bash centos7.sh
+
+wget https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/centos6softether.sh
+bash centos7softether.sh
+```
+Tested on
+* CentOS 7 64 bit
+* OpenVZ only
 
 ## Description
 
