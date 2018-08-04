@@ -41,5 +41,8 @@ echo check this step to check are installer is working properly
 echo 1. vpnserver and vpncmd is on /usr/local/vpnserver
 echo 2. /etc/init.d/vpnserver start can executed
 echo if vpnserver can start, congratulations!
+echo cd /usr/local/vpnserver
+echo ./vpncmd (Select 1)
+echo ServerPasswordSet (To Set Password)
 echo ------------------------------------------------------
 exit
