@@ -16,6 +16,7 @@ echo "Please press 1 for all the following questions."
 sleep 3
 make
 cd ..
+
 #Moving files to /usr/local
 
 mv vpnserver /usr/local
