@@ -30,7 +30,8 @@ chmod 700 vpnserver
 cd /root
 wget -O /etc/init.d/vpnserver "https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/conf/softether.conf"
 mkdir /var/lock/subsys
-chmod 755 /etc/init.d/vpnserver && /etc/init.d/vpnserver start
+chmod 755 /etc/init.d/vpnserver
+/etc/init.d/vpnserver start
 chkconfig --add vpnserver
 
 #End
