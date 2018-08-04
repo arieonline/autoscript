@@ -4,7 +4,7 @@ Automatic Script Installer by Orang
 
 ## Usage
 
-### Centos 7 64 bit (OpenVZ VPS)
+### CentOS 7 64 bit (OpenVZ VPS)
 ```
 wget https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/centos7.sh
 bash centos7.sh
