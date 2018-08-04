@@ -30,10 +30,10 @@ yum -y remove cyrus-sasl
 
 # install webserver
 yum -y install nginx php-fpm php-cli
-service nginx restart
-service php-fpm restart
-chkconfig nginx on
-chkconfig php-fpm on
+systemctl restart nginx
+systemctl restart php-fpm
+systemctl enable nginx
+systemctl enable php-fpm
 
 # install essential package
 yum -y install rrdtool screen iftop htop nmap bc nethogs vnstat ngrep mtr git zsh mrtg unrar rsyslog rkhunter mrtg net-snmp net-snmp-utils expect nano bind-utils
@@ -43,16 +43,16 @@ yum -y install cmake
 yum -y --enablerepo=rpmforge install axel sslh ptunnel unrar
 
 # matiin exim
-service exim stop
-chkconfig exim off
+systemctl stop exim
+systemctl disable exim
 
 # setting vnstat
 vnstat -u -i venet0
 echo "MAILTO=root" > /etc/cron.d/vnstat
 echo "*/5 * * * * root /usr/sbin/vnstat.cron" >> /etc/cron.d/vnstat
 sed -i 's/eth0/venet0/g' /etc/sysconfig/vnstat
-service vnstat restart
-chkconfig vnstat on
+systemctl restart vnstat
+systemctl enable vnstat
 
 # install screenfetch
 cd
@@ -73,16 +73,16 @@ rm /etc/nginx/conf.d/*
 wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/conf/vps.conf"
 sed -i 's/apache/nginx/g' /etc/php-fpm.d/www.conf
 chmod -R +rx /home/vps
-service php-fpm restart
-service nginx restart
+systemctl restart php-fpm
+systemctl restart nginx
 
 # install mrtg
 cd /etc/snmp/
 wget -O /etc/snmp/snmpd.conf "https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/conf/snmpd.conf"
 wget -O /root/mrtg-mem.sh "https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/conf/mrtg-mem.sh"
 chmod +x /root/mrtg-mem.sh
-service snmpd restart
-chkconfig snmpd on
+systemctl restart snmpd
+systemctl enable snmpd
 snmpwalk -v 1 -c public localhost | tail
 mkdir -p /home/vps/public_html/mrtg
 cfgmaker --zero-speed 100000000 --global 'WorkDir: /home/vps/public_html/mrtg' --output /etc/mrtg/mrtg.cfg public@localhost
@@ -100,16 +100,15 @@ cd
 
 yum -y install dropbear 
 wget -O /etc/sysconfig/dropbear "https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/conf/dropbear.conf"
-chkconfig dropbear on
-service dropbear start
-service dropbear restart
+systemctl restart dropbear
+systemctl enable dropbear
 
 # install squid
 yum -y install squid
 wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/conf/squid-centos.conf"
 sed -i $MYIP2 /etc/squid/squid.conf;
-service squid restart
-chkconfig squid on
+systemctl restart squid
+systemctl enable squid
 
 # install vnstat gui
 cd /home/vps/public_html/
@@ -127,8 +126,15 @@ cd
 
 # install fail2ban
 yum -y install fail2ban
-service fail2ban restart
-chkconfig fail2ban on
+systemctl restart fail2ban
+systemctl enable fail2ban
+
+# install Webmin
+wget http://prdownloads.sourceforge.net/webadmin/webmin-1.890-1.noarch.rpm
+yum -y install perl perl-Net-SSLeay openssl perl-IO-Tty perl-Encode-Detect
+rpm -U webmin-1.890-1.noarch.rpm
+systemctl restart webmin
+systemctl enable webmin
 
 # downlaod script
 cd
@@ -140,27 +146,63 @@ chmod +x speedtest_cli.py
 chmod +x ps_mem.py
 
 # cron
-service crond start
-chkconfig crond on
+systemctl restart crond
+systemctl enable crond
 
 # set time GMT +8
 ln -fs /usr/share/zoneinfo/Asia/Kuala_Lumpur /etc/localtime
 
 # finalisasi
 chown -R nginx:nginx /home/vps/public_html
-service nginx start
-service php-fpm start
-service vnstat restart
-service snmpd restart
-service sshd restart
-service dropbear restart
-service fail2ban restart
-service squid restart
-service webmin restart
-service crond start
+systemctl restart nginx
+systemctl restart php-fpm
+systemctl restart vnstat
+systemctl restart snmpd
+systemctl restart sshd
+systemctl restart dropbear
+systemctl restart fail2ban
+systemctl restart squid
+systemctl restart webmin
+systemctl restart crond
 
-echo -----------------------------------------------------
-echo Install finish!
-echo Please Reboot Server
-echo ------------------------------------------------------
-exit
+# info
+clear
+echo "Setup By 0DinZ" | tee log-install.txt
+echo "===============================================" | tee -a log-install.txt
+echo ""  | tee -a log-install.txt
+echo "Service"  | tee -a log-install.txt
+echo "-------"  | tee -a log-install.txt
+echo "OpenSSH  : 22"  | tee -a log-install.txt
+echo "Dropbear : 143"  | tee -a log-install.txt
+echo "Squid3   : 8080 (limit to IP SSH)"  | tee -a log-install.txt
+echo ""  | tee -a log-install.txt
+echo "Tools"  | tee -a log-install.txt
+echo "-----"  | tee -a log-install.txt
+echo "axel"  | tee -a log-install.txt
+echo "bmon"  | tee -a log-install.txt
+echo "htop"  | tee -a log-install.txt
+echo "iftop"  | tee -a log-install.txt
+echo "mtr"  | tee -a log-install.txt
+echo "nethogs"  | tee -a log-install.txt
+echo ""  | tee -a log-install.txt
+echo "Script"  | tee -a log-install.txt
+echo "------"  | tee -a log-install.txt
+echo "screenfetch"  | tee -a log-install.txt
+echo "./ps_mem.py"  | tee -a log-install.txt
+echo "./speedtest_cli.py --share"  | tee -a log-install.txt
+echo "./bench-network.sh"  | tee -a log-install.txt
+echo ""  | tee -a log-install.txt
+echo ""  | tee -a log-install.txt
+echo "Fitur lain"  | tee -a log-install.txt
+echo "----------"  | tee -a log-install.txt
+echo "Webmin   : http://$MYIP:10000/"  | tee -a log-install.txt
+echo "vnstat   : http://$MYIP/vnstat/"  | tee -a log-install.txt
+echo "MRTG     : http://$MYIP/mrtg/"  | tee -a log-install.txt
+echo "Timezone : Asia/Kuala Lumpur"  | tee -a log-install.txt
+echo "Fail2Ban : [on]"  | tee -a log-install.txt
+echo ""  | tee -a log-install.txt
+echo "Log Installasi --> /root/log-install.txt"  | tee -a log-install.txt
+echo ""  | tee -a log-install.txt
+echo "Please Reboot Your VPS!"  | tee -a log-install.txt
+echo ""  | tee -a log-install.txt
+echo "==============================================="  | tee -a log-install.txt
