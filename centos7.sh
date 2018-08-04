@@ -175,8 +175,45 @@ service squid restart
 service webmin restart
 service crond start
 
-echo -----------------------------------------------------
-echo Install finish!
-echo Please Reboot Server
-echo ------------------------------------------------------
-exit
+# info
+clear
+echo "0DinZ" | tee log-install.txt
+echo "===============================================" | tee -a log-install.txt
+echo ""  | tee -a log-install.txt
+echo "Service"  | tee -a log-install.txt
+echo "-------"  | tee -a log-install.txt
+echo "OpenSSH  : 22"  | tee -a log-install.txt
+echo "Dropbear : 143"  | tee -a log-install.txt
+echo "Squid3   : 8080 (limit to IP SSH)"  | tee -a log-install.txt
+echo ""  | tee -a log-install.txt
+echo "Tools"  | tee -a log-install.txt
+echo "-----"  | tee -a log-install.txt
+echo "axel"  | tee -a log-install.txt
+echo "bmon"  | tee -a log-install.txt
+echo "htop"  | tee -a log-install.txt
+echo "iftop"  | tee -a log-install.txt
+echo "mtr"  | tee -a log-install.txt
+echo "nethogs"  | tee -a log-install.txt
+echo ""  | tee -a log-install.txt
+echo "Script"  | tee -a log-install.txt
+echo "------"  | tee -a log-install.txt
+echo "screenfetch"  | tee -a log-install.txt
+echo "./ps_mem.py"  | tee -a log-install.txt
+echo "./speedtest_cli.py --share"  | tee -a log-install.txt
+echo "./bench-network.sh"  | tee -a log-install.txt
+echo ""  | tee -a log-install.txt
+echo "Fitur lain"  | tee -a log-install.txt
+echo "----------"  | tee -a log-install.txt
+echo "Webmin   : http://$MYIP:10000/"  | tee -a log-install.txt
+echo "vnstat   : http://$MYIP/vnstat/"  | tee -a log-install.txt
+echo "MRTG     : http://$MYIP/mrtg/"  | tee -a log-install.txt
+echo "Timezone : Asia/Kuala_Lumpur"  | tee -a log-install.txt
+echo "Fail2Ban : [on]"  | tee -a log-install.txt
+echo "IPv6     : [off]"  | tee -a log-install.txt
+echo ""  | tee -a log-install.txt
+echo "Log Installasi --> /root/log-install.txt"  | tee -a log-install.txt
+echo ""  | tee -a log-install.txt
+echo "SILAHKAN REBOOT VPS ANDA !"  | tee -a log-install.txt
+echo ""  | tee -a log-install.txt
+echo "==============================================="  | tee -a log-install.txt
+
