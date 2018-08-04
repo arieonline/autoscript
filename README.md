@@ -20,10 +20,9 @@ Tested on
 
 ### What's server included
 * OpenSSH port 22
-* SoftEther VPN
 * Dropbear port 143
 * Squid port 8080 (limit to IP VPS)
-* SoftEther (Please Setup Manually)
+* SoftEther VPN (Please Setup Manually)
 
 ### What's features included
 * Webmin http(s)://[ip]:10000/
