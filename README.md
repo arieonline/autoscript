@@ -40,7 +40,7 @@ Tested on
 * nethogs  
 
 ### What's script included
-* screenfetch
+* screenfetch (https://github.com/KittyKatt/screenFetch)
 * ps_mem.py (https://github.com/pixelb/ps_mem/)
 * speedtest-cli (https://github.com/sivel/speedtest-cli)
 * bench-network.sh
