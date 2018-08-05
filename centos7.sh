@@ -138,11 +138,11 @@ systemctl enable webmin
 
 # downlaod script
 cd
-wget -O speedtest_cli.py "https://raw.github.com/sivel/speedtest-cli/master/speedtest_cli.py"
+wget -O speedtest-cli https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py
 wget -O bench-network.sh "https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/conf/bench-network.sh"
 wget -O ps_mem.py "https://raw.github.com/pixelb/ps_mem/master/ps_mem.py"
 chmod +x bench-network.sh
-chmod +x speedtest_cli.py
+chmod +x speedtest-cli
 chmod +x ps_mem.py
 
 # cron
@@ -189,7 +189,7 @@ echo "Script"  | tee -a log-install.txt
 echo "------"  | tee -a log-install.txt
 echo "screenfetch"  | tee -a log-install.txt
 echo "./ps_mem.py"  | tee -a log-install.txt
-echo "./speedtest_cli.py --share"  | tee -a log-install.txt
+echo "./speedtest-cli --share"  | tee -a log-install.txt
 echo "./bench-network.sh"  | tee -a log-install.txt
 echo ""  | tee -a log-install.txt
 echo ""  | tee -a log-install.txt
