@@ -10,12 +10,16 @@ SSH Dropbear Squid Setup
 
 wget https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/centos7.sh
 bash centos7.sh
+```
 
+```
 SoftEther Script
 
 wget https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/centos7softether.sh
 bash centos7softether.sh
-#After install
+
+ # After install
+ 
 cd cd /usr/local/vpnserver
 ./vpncmd (Press 1, enter localhost:5555, empty hub)
 ServerPasswordSet (set your password)
