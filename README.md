@@ -20,11 +20,15 @@ bash centos7softether.sh
 
  # After install
  
-cd cd /usr/local/vpnserver
+cd /usr/local/vpnserver
 ./vpncmd (Press 1, enter localhost:5555, empty hub)
 ServerPasswordSet (set your password)
 Done (Please setup Using SE-VPN Server Manager (Tools))
 
+# Note FirewallD may block your connection
+
+systemctl disable firewalld
+systemctl stop firewalld
 ```
 Tested on
 * CentOS 7 64 bit
