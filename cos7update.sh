@@ -16,3 +16,18 @@ yum -y update
 
 yum -y install wget curl
 yum -y install nano
+
+# install screenfetch
+cd
+wget https://github.com/KittyKatt/screenFetch/raw/master/screenfetch-dev
+mv screenfetch-dev /usr/bin/screenfetch
+chmod +x /usr/bin/screenfetch
+echo "clear" >> .bash_profile
+echo "screenfetch" >> .bash_profile
+
+# info
+clear
+echo "Setup By 0DinZ" | tee log-install.txt
+echo "===============================================" | tee -a log-install.txt
+echo ""  | tee -a log-install.txt
+echo "Done" | tee -a log-install.txt
