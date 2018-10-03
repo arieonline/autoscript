@@ -36,6 +36,20 @@ wget https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/cos7upda
 bash cos7update.sh
 
 ```
+### Exta Shadowsocks Auto Install Shadowsocks(libev) Server for CentOS 7
+```
+wget --no-check-certificate -O shadowsocks-libev.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-libev.sh
+
+chmod +x shadowsocks-libev.sh
+
+./shadowsocks-libev.sh 2>&1 | tee shadowsocks-libev.log
+
+Uninstall
+
+./shadowsocks-libev.sh uninstall
+```
+
+
 Tested on
 * CentOS 7 64 bit
 * OpenVZ only
@@ -74,4 +88,5 @@ Tested on
 * http://blog.jualssh.com/2014/01/centos6-automatic-script-installer/
 * http://blog.jualssh.com/2014/01/debian6-sh-automatic-script-installer/
 * http://blog.jualssh.com/2014/01/debian7-sh-automatic-script-installer/
+* https://teddysun.com/
 
