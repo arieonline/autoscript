@@ -7,6 +7,7 @@ yum groupinstall "Development Tools" -y
 yum install -y which
 
 # install
+
 cd /root
 wget http://www.softether-download.com/files/softether/v4.28-9669-beta-2018.09.11-tree/Linux/SoftEther_VPN_Server/64bit_-_Intel_x64_or_AMD64/softether-vpnserver-v4.28-9669-beta-2018.09.11-linux-x64-64bit.tar.gz
 tar xzvf softether-vpnserver-v4.28-9669-beta-2018.09.11-linux-x64-64bit.tar.gz
