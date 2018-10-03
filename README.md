@@ -29,14 +29,18 @@ Done (Please setup Using SE-VPN Server Manager (Tools))
 
 systemctl disable firewalld
 systemctl stop firewalld
+```
 
 # Update Only
 
+```
 wget https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/cos7update.sh 
 bash cos7update.sh
-
 ```
+
+
 ### Exta Shadowsocks Auto Install Shadowsocks(libev) Server for CentOS 7
+
 ```
 wget --no-check-certificate -O shadowsocks-libev.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-libev.sh
 
