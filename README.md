@@ -29,6 +29,12 @@ Done (Please setup Using SE-VPN Server Manager (Tools))
 
 systemctl disable firewalld
 systemctl stop firewalld
+
+# Update Only
+
+wget https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/cos7update.sh 
+bash cos7update.sh
+
 ```
 Tested on
 * CentOS 7 64 bit
