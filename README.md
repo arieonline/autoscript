@@ -3,63 +3,75 @@ Automatic Script Installer by Orang
 ==========
 
 ## Usage
-### Centos 6 (OpenVZ VPS)
+
+### CentOS 7 64 bit (OpenVZ VPS)
 ```
-wget https://raw.github.com/arieonline/autoscript/master/centos6.sh
-bash centos6.sh
+SSH Dropbear Squid Setup
+
+wget https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/centos7.sh
+bash centos7.sh
 ```
+
+```
+SoftEther Script
+
+wget https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/centos7softether.sh
+bash centos7softether.sh
+
+ # After install
+ 
+cd /usr/local/vpnserver
+./vpncmd (Press 1, enter localhost:5555, empty hub)
+ServerPasswordSet (set your password)
+Done (Please setup Using SE-VPN Server Manager (Tools))
+
+# Note FirewallD may block your connection
+
+systemctl disable firewalld
+systemctl stop firewalld
+```
+
+# Update Only
+
+```
+wget https://raw.githubusercontent.com/0DinZ/CentOS-7-AutoScript/master/cos7update.sh 
+bash cos7update.sh
+```
+
+
+### Exta Shadowsocks Auto Install Shadowsocks(libev) Server for CentOS 7
+
+```
+wget --no-check-certificate -O shadowsocks-libev.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-libev.sh
+
+chmod +x shadowsocks-libev.sh
+
+./shadowsocks-libev.sh 2>&1 | tee shadowsocks-libev.log
+
+Uninstall
+
+./shadowsocks-libev.sh uninstall
+```
+
+
 Tested on
-* CentOS 6 32 bit
-* CentOS 6 64 bit
+* CentOS 7 64 bit
 * OpenVZ only
-
-### Centos 6 (KVM VPS)
-```
-wget https://raw.github.com/arieonline/autoscript/master/centos6-kvm.sh
-bash centos6-kvm.sh
-```
-Tested on
-* CentOS 6 32 bit
-* CentOS 6 64 bit
-* KVM only
-
-### Debian 6 32bit
-```
-wget https://raw.github.com/arieonline/autoscript/master/debian6.sh
-bash debian6.sh
-```
-Tested on
-* Debian 6 32 bit
-* Debian 6 64 bit
-* OpenVZ only
-
-### Debian 7 32bit
-```
-wget https://raw.github.com/arieonline/autoscript/master/debian7.sh
-bash debian7.sh
-```
-Tested on
-* Debian 7 32 bit
-* Debian 7 64 bit
-* OpenVZ only
-
 
 ## Description
 
 ### What's server included
-* OpenSSH port 22, 143
-* OpenVPN port 1194 tcp
-* Dropbear port 109, 110, 443
+* OpenSSH port 22
+* Dropbear port 143
 * Squid port 8080 (limit to IP VPS)
-* badvpn-udpgw port 7300
+* SoftEther VPN (Please Setup Manually)
 
 ### What's features included
 * Webmin http(s)://[ip]:10000/
 * vnstat http://[ip]/vnstat/
 * MRTG http://[ip]/mrtg/
-* Timezone : Asia/Jakarta
+* Timezone : Asia/Kuala Lumpur
 * Fail2Ban : [on]
-* IPv6     : [off]
 
 ### What's tools included
 * axel
@@ -70,20 +82,15 @@ Tested on
 * nethogs  
 
 ### What's script included
-* screenfetch
+* screenfetch (https://github.com/KittyKatt/screenFetch)
 * ps_mem.py (https://github.com/pixelb/ps_mem/)
 * speedtest-cli (https://github.com/sivel/speedtest-cli)
 * bench-network.sh
-* user-login.sh
-* user-limit.sh
-* user-expire.sh
 
 ## Reference
 * http://blog.jualssh.com/
 * http://blog.jualssh.com/2014/01/centos6-automatic-script-installer/
 * http://blog.jualssh.com/2014/01/debian6-sh-automatic-script-installer/
 * http://blog.jualssh.com/2014/01/debian7-sh-automatic-script-installer/
+* https://teddysun.com/
 
-Openvpn
-wget https://raw.github.com/arieonline/autoscript/master/dimas.debian
-bash dimas.debian
